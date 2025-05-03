@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 def traverseWeb(driver):
@@ -23,7 +25,11 @@ def traverseWeb(driver):
             print("Found file:",trueele.get_attribute('href'))
         else:
             #print("Traversing into folder: ",web_table[ele_id],"with ID:",ele_id)
-            driver.find_element(By.ID,ele_id).click()
+            link_ele = driver.find_element(By.ID,ele_id)
+            link_ele.click()
+
+            WebDriverWait(driver, 10).until(EC.staleness_of(link_ele))
+
             traverseWeb(driver)
             driver.back()
 
@@ -34,4 +40,3 @@ driver.get("https://libportal.manipal.edu/MIT/Question%20Paper.aspx")
 
 
 traverseWeb(driver)
-time.sleep(1)
